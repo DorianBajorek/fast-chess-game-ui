@@ -15,6 +15,24 @@ export const authenticateUser = async (username: string, password: string) => {
   }
 };
 
+export const registerUser = async (email: string, username: string, password: string) => {
+  try {
+    const payload = {
+      email: email,
+      username: username,
+      password: password
+    };
+    console.log("LECYMY")
+    const response = await axios.post("http://127.0.0.1:8000/rest_api/signup/", payload);
+    console.log(response.data)
+    return response.data.token;
+  } catch (error) {
+    console.error('Registration failed', error);
+    return "example-token";
+  }
+};
+
+
 
 export const showActiveUsers = async (token: string) => {
   try {

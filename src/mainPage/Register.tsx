@@ -1,13 +1,14 @@
 import React, { type CSSProperties, useState } from 'react';
-import { authenticateUser, showActiveUsers } from '../../FastChessGameSerive';
-import useTokenStore from './TokenStore';
+import useTokenStore from './loginPage/TokenStore';
+import { registerUser } from '../FastChessGameSerive';
 
-const Login: React.FC = () => {
-  const [login, setLogin] = useState('');
+const Register: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { updateToken } = useTokenStore();
   
-  const loginContainerStyle: CSSProperties = {
+  const registerContainerStyle: CSSProperties = {
     width: "100vw",
     height: "calc(100vh - 101px)",
     overflow: "auto",
@@ -54,23 +55,43 @@ const Login: React.FC = () => {
     transition: 'background-color 0.3s',
   };
 
-  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLogin(e.target.value);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
   }
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   }
 
-  const handleAuthenticateUser = async () => {
-    const token = await authenticateUser(login, password);
-    console.log(token)
-    updateToken(token);
+  const handleRegisterUser = async () => {
+    try {
+      const token = await registerUser(email, username, password);
+      console.log(token)
+      updateToken(token);
+    } catch (error) {
+      console.error("Register failed", error);
+    }
   }
 
   return (
-    <div style={loginContainerStyle}>
+    <div style={registerContainerStyle}>
       <div style={formStyle}>
+        <div style={formGroupStyle}>
+          <label htmlFor="email" style={labelStyle}>Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            style={inputStyle}
+            onChange={handleEmailChange}
+            value={email}
+            required
+          />
+        </div>
         <div style={formGroupStyle}>
           <label htmlFor="username" style={labelStyle}>Username:</label>
           <input
@@ -78,8 +99,8 @@ const Login: React.FC = () => {
             id="username"
             name="username"
             style={inputStyle}
-            onChange={handleLoginChange}
-            value={login}
+            onChange={handleUsernameChange}
+            value={username}
             required
           />
         </div>
@@ -95,10 +116,10 @@ const Login: React.FC = () => {
             required
           />
         </div>
-        <button type="submit" style={buttonStyle} onClick={handleAuthenticateUser}>Log In</button>
+        <button type="button" style={buttonStyle} onClick={handleRegisterUser}>Register</button>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;
