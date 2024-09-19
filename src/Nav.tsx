@@ -1,17 +1,25 @@
 import React from 'react';
-
+import { useToken } from './mainPage/loginPage/TokenStore';
 const Nav: React.FC = () => {
+  const { token } = useToken();
+
   return (
     <nav style={styles.nav}>
       <div style={styles.logoWrapper}>
-        <img src='/logoChess.png' style={styles.logoImage}/>
+        <img src='/logoChess.png' style={styles.logoImage} alt="Logo"/>
         FastChessGame
-        </div>
+      </div>
       <ul style={styles.navList}>
         <li style={styles.navItem}><a href="/" style={styles.navLink}>Home</a></li>
         <li style={styles.navItem}><a href="/about" style={styles.navLink}>About</a></li>
-        <li style={styles.navItem}><a href="/login" style={styles.navLink}>Login</a></li>
-        <li style={styles.navItem}><a href="/register" style={styles.navLink}>Register</a></li>
+        {token ? (
+          <li style={styles.navItem}><a href="/" style={styles.navLink}>Logout</a></li>
+        ) : (
+          <>
+            <li style={styles.navItem}><a href="/login" style={styles.navLink}>Login</a></li>
+            <li style={styles.navItem}><a href="/register" style={styles.navLink}>Register</a></li>
+          </>
+        )}
       </ul>
     </nav>
   );
