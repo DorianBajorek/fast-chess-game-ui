@@ -1,5 +1,5 @@
 import React, { type CSSProperties, useState } from 'react';
-import { authenticateUser } from '../../FastChessGameSerive';
+import { authenticateUser, showActiveUsers } from '../../FastChessGameSerive';
 import useTokenStore from './TokenStore';
 
 const Login: React.FC = () => {
@@ -7,7 +7,6 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const { updateToken } = useTokenStore();
   
-  // Style dla LoginContainer
   const loginContainerStyle: CSSProperties = {
     width: "100vw",
     height: "calc(100vh - 101px)",
@@ -17,7 +16,6 @@ const Login: React.FC = () => {
     justifyContent: "center",
   };
 
-  // Style dla formularza
   const formStyle: CSSProperties = {
     backgroundColor: '#fff',
     padding: '2rem',
@@ -27,19 +25,16 @@ const Login: React.FC = () => {
     width: '100%',
   };
 
-  // Style dla grupy formularzy
   const formGroupStyle: CSSProperties = {
     marginBottom: '1rem',
   };
 
-  // Style dla label
   const labelStyle: CSSProperties = {
     display: 'block',
     marginBottom: '0.5rem',
     fontWeight: 'bold',
   };
 
-  // Style dla input
   const inputStyle: CSSProperties = {
     width: '100%',
     padding: '0.5rem',
@@ -47,7 +42,6 @@ const Login: React.FC = () => {
     borderRadius: '4px',
   };
 
-  // Style dla button
   const buttonStyle: CSSProperties = {
     backgroundColor: '#007bff',
     color: '#fff',
@@ -70,7 +64,7 @@ const Login: React.FC = () => {
 
   const handleAuthenticateUser = async () => {
     // Harcode user data
-    setLogin("adam12")
+    setLogin("adam_rest_api")
     setPassword("Pass1234!")
 
     const token = await authenticateUser(login, password);
