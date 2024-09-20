@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { registerUser } from '../FastChessGameSerive';
 import { useToken } from './loginPage/TokenStore';
 import { useNavigate } from 'react-router-dom';
+import { COLORS } from '../Constans';
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -104,7 +105,7 @@ const inputStyle: React.CSSProperties = {
 };
 
 const buttonStyle: React.CSSProperties = {
-  backgroundColor: '#007bff',
+  backgroundColor: COLORS.info_button,
   color: '#fff',
   border: 'none',
   padding: '0.75rem 1.5rem',
@@ -112,7 +113,6 @@ const buttonStyle: React.CSSProperties = {
   cursor: 'pointer',
   fontSize: '1rem',
   fontWeight: 'bold',
-  transition: 'background-color 0.3s',
 };
 
 export default Register;
