@@ -5,6 +5,7 @@ import Login from './mainPage/loginPage/Login';
 import Register from './mainPage/Register';
 import Nav from './Nav';
 import { TokenProvider } from './mainPage/loginPage/TokenStore';
+import TablePlayers from './game/TablePlayers';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<MainPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/table" element={<TablePlayers />} />
           </Routes>
         </div>
       </Router>

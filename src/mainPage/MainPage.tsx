@@ -31,7 +31,7 @@ const MainPage: React.FC = () => {
             Our portal offers everything you need to become a better player.
           </p>
           <div style={styles.actionButtons}>
-          {token ? (
+          {token || true ? (
             <button onClick={handleStartGame} style={styles.playButton}>Start Playing</button>
           ) :
             <>
