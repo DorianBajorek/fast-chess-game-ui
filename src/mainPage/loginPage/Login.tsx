@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { authenticateUser } from '../../FastChessGameSerive';
 import { useToken } from './TokenStore';
 import { useNavigate } from 'react-router-dom';
+import { COLORS } from '../../Constans';
 
 const Login: React.FC = () => {
   const [login, setLogin] = useState('');
@@ -86,7 +87,7 @@ const inputStyle: React.CSSProperties = {
 };
 
 const buttonStyle: React.CSSProperties = {
-  backgroundColor: '#007bff',
+  backgroundColor: COLORS.info_button,
   color: '#fff',
   border: 'none',
   padding: '0.75rem 1.5rem',
@@ -94,7 +95,6 @@ const buttonStyle: React.CSSProperties = {
   cursor: 'pointer',
   fontSize: '1rem',
   fontWeight: 'bold',
-  transition: 'background-color 0.3s',
 };
 
 export default Login;
