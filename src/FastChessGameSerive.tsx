@@ -40,8 +40,7 @@ export const showActiveUsers = async (token: string) => {
         },
       }
     );
-
-    console.log("Zalogowani użytkownicy:", JSON.stringify(response.data, null, 2));
+    return response
   } catch (error) {
     console.error("Coś poszło nie tak", error);
   }
