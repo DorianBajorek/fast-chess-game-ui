@@ -6,6 +6,7 @@ import Register from './mainPage/loginPage/Register';
 import Nav from './Nav';
 import { TokenProvider } from './mainPage/loginPage/TokenStore';
 import TablePlayers from './game/TablePlayers';
+import Game from './game/Game';
 
 const appStyles = {
   display: 'flex',
@@ -29,6 +30,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/table" element={<TablePlayers />} />
+              <Route path="/game" element={<Game />} />
             </Routes>
           </main>
         </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { showActiveUsers } from '../FastChessGameSerive';
 import { useToken } from '../mainPage/loginPage/TokenStore';
+import { useNavigate } from 'react-router-dom';
 
 interface Player {
   id: number;
@@ -11,6 +12,7 @@ interface Player {
 const TablePlayers: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
   const token = useToken().token;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -40,7 +42,7 @@ const TablePlayers: React.FC = () => {
   }, [token]);
 
   const handlePlay = (playerName: string) => {
-    alert(`Challenging ${playerName} to a game!`);
+    navigate('/game');
   };
 
   return (
