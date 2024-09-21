@@ -31,7 +31,7 @@ const MainPage: React.FC = () => {
             Our portal offers everything you need to become a better player.
           </p>
           <div style={styles.actionButtons}>
-          {token || true ? (
+          {token ? (
             <button onClick={handleStartGame} style={styles.playButton}>Start Playing</button>
           ) :
             <>
@@ -42,15 +42,6 @@ const MainPage: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <div style={styles.extraInfo}>
-        <h2 style={styles.extraTitle}>Latest News & Updates</h2>
-        <p style={styles.extraDescription}>
-          Stay tuned for the latest news, upcoming tournaments, and articles
-          from the world of chess.
-        </p>
-        <a href="/news" style={styles.newsLink}>Read more</a>
-      </div>
     </div>
   );
 };
@@ -60,7 +51,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column' as 'column',
     alignItems: 'center',
-    padding: '20px',
+    padding: '100px',
     fontFamily: 'Arial, sans-serif',
   },
   introSection: {

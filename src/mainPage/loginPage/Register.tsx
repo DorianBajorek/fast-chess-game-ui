@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { registerUser } from '../FastChessGameSerive';
-import { useToken } from './loginPage/TokenStore';
+import { registerUser } from '../../FastChessGameSerive';
+import { useToken } from './TokenStore';
 import { useNavigate } from 'react-router-dom';
-import { COLORS } from '../Constans';
+import { COLORS } from '../../Constans';
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
