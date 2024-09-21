@@ -6,19 +6,33 @@ import Register from './mainPage/loginPage/Register';
 import Nav from './Nav';
 import { TokenProvider } from './mainPage/loginPage/TokenStore';
 import TablePlayers from './game/TablePlayers';
+import Footer from './Footer';
+
+const appStyles = {
+  display: 'flex',
+  flexDirection: 'column' as 'column',
+  minHeight: '100vh',
+};
+
+const mainStyles = {
+  flexGrow: 1,
+};
 
 function App() {
   return (
     <TokenProvider>
       <Router>
-        <div className="App">
+        <div style={appStyles} className="App">
           <Nav />
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/table" element={<TablePlayers />} />
-          </Routes>
+          <main style={mainStyles}>
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/table" element={<TablePlayers />} />
+            </Routes>
+          </main>
+          <Footer />
         </div>
       </Router>
     </TokenProvider>
