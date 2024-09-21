@@ -6,7 +6,6 @@ import Register from './mainPage/loginPage/Register';
 import Nav from './Nav';
 import { TokenProvider } from './mainPage/loginPage/TokenStore';
 import TablePlayers from './game/TablePlayers';
-import Footer from './Footer';
 
 const appStyles = {
   display: 'flex',
@@ -32,7 +31,6 @@ function App() {
               <Route path="/table" element={<TablePlayers />} />
             </Routes>
           </main>
-          <Footer />
         </div>
       </Router>
     </TokenProvider>

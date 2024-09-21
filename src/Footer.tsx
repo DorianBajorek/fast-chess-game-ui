@@ -13,8 +13,9 @@ const Footer: React.FC = () => {
 const styles = {
     footer: {
       backgroundColor: '#f9f9f9',
-      padding: '20px 50px',
+      padding: '20px 0px',
       borderTop: 'solid 1px #e5e5e5',
+      width: "100%"
     },
     copyright: {
       textAlign: 'center' as 'center',
