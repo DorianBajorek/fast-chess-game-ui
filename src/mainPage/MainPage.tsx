@@ -2,7 +2,7 @@ import React from 'react';
 import { COLORS } from '../Constans';
 import { useToken } from './loginPage/TokenStore';
 import { useNavigate } from 'react-router-dom';
-;
+import Footer from '../Footer';
 
 const MainPage: React.FC = () => {
   const { token } = useToken();
@@ -10,11 +10,11 @@ const MainPage: React.FC = () => {
 
   const handleStartGame = () => {
     navigate('/table');
-  }
+  };
 
   const handleLogin = () => {
     navigate('/login');
-  }
+  };
 
   return (
     <div style={styles.mainContainer}>
@@ -31,17 +31,16 @@ const MainPage: React.FC = () => {
             Our portal offers everything you need to become a better player.
           </p>
           <div style={styles.actionButtons}>
-          {token ? (
-            <button onClick={handleStartGame} style={styles.playButton}>Start Playing</button>
-          ) :
-            <>
+            {token ? (
+              <button onClick={handleStartGame} style={styles.playButton}>Start Playing</button>
+            ) : (
               <button onClick={handleLogin} style={styles.playButton}>Login</button>
-            </>
-          }
+            )}
             <button style={styles.learnButton}>Learn More</button>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
@@ -51,8 +50,11 @@ const styles = {
     display: 'flex',
     flexDirection: 'column' as 'column',
     alignItems: 'center',
-    padding: '100px',
+    paddingTop: '100px',
     fontFamily: 'Arial, sans-serif',
+    flex: '1',
+    justifyContent: 'space-between' as 'space-between',
+    height: 'calc(100vh - 160px)'
   },
   introSection: {
     display: 'flex',
@@ -101,30 +103,6 @@ const styles = {
     backgroundColor: '#008CBA',
     color: 'white',
     transition: 'background-color 0.3s ease',
-  },
-  learnButtonHover: {
-    backgroundColor: '#007bb5',
-  },
-  extraInfo: {
-    textAlign: 'center' as 'center',
-    marginTop: '40px',
-  },
-  extraTitle: {
-    fontSize: '28px',
-    marginBottom: '10px',
-  },
-  extraDescription: {
-    fontSize: '16px',
-    marginBottom: '20px',
-    color: '#666',
-  },
-  newsLink: {
-    color: '#007bb5',
-    textDecoration: 'none',
-    fontWeight: 'bold',
-  },
-  newsLinkHover: {
-    textDecoration: 'underline',
   },
 };
 
