@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { showActiveUsers } from '../FastChessGameSerive';
+import { useToken } from '../mainPage/loginPage/TokenStore';
 
 interface Player {
   id: number;
@@ -7,13 +9,35 @@ interface Player {
 }
 
 const TablePlayers: React.FC = () => {
-  const players: Player[] = [
-    { id: 1, name: 'John Doe', rank: 1200 },
-    { id: 2, name: 'Jane Smith', rank: 1500 },
-    { id: 3, name: 'Carlos Hernández', rank: 1800 },
-    { id: 4, name: 'Marie Dupont', rank: 1700 },
-    { id: 5, name: 'Li Wei', rank: 1400 },
-  ];
+  const [players, setPlayers] = useState<Player[]>([]);
+  const token = useToken().token;
+
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      try {
+        const response = await showActiveUsers(token);
+
+        const loggedInUsers = response?.data;
+
+        if (!loggedInUsers) {
+          console.error('No user is logged.');
+          return;
+        }
+
+        const playersData: Player[] = loggedInUsers.map((user: any, index: number) => ({
+          id: index + 1,
+          name: user.username,
+          rank: Math.floor(Math.random() * 2000) + 1000,
+        }));
+
+        setPlayers(playersData);
+      } catch (error) {
+        console.error('Something wrong', error);
+      }
+    };
+
+    fetchPlayers();
+  }, [token]);
 
   const handlePlay = (playerName: string) => {
     alert(`Challenging ${playerName} to a game!`);
