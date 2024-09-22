@@ -1,8 +1,11 @@
 import React from 'react';
-import { useToken } from './mainPage/loginPage/TokenStore';
+import { useUserData } from './mainPage/loginPage/UserData';
 const Nav: React.FC = () => {
-  const { token } = useToken();
+  const { token, logout } = useUserData();
 
+  const logoutUser = () => {
+    logout();
+  }
   return (
     <nav style={styles.nav}>
       <div style={styles.logoWrapper}>
@@ -13,7 +16,10 @@ const Nav: React.FC = () => {
         <li style={styles.navItem}><a href="/" style={styles.navLink}>Home</a></li>
         <li style={styles.navItem}><a href="/about" style={styles.navLink}>About</a></li>
         {token ? (
-          <li style={styles.navItem}><a href="/" style={styles.navLink}>Logout</a></li>
+          <>
+            <li style={styles.navItem}><a href="/profile" style={styles.navLink}>Profile</a></li>
+            <li style={styles.navItem}><a onClick={logoutUser} href="/" style={styles.navLink}>Logout</a></li>
+          </>
         ) : (
           <>
             <li style={styles.navItem}><a href="/login" style={styles.navLink}>Login</a></li>

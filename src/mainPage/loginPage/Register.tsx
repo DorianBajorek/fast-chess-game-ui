@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { registerUser } from '../../FastChessGameSerive';
-import { useToken } from './TokenStore';
+import { useUserData } from './UserData';
 import { useNavigate } from 'react-router-dom';
 import { COLORS } from '../../Constans';
 
@@ -8,7 +8,7 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { updateToken } = useToken();
+  const { updateToken, updateUserName } = useUserData();
   const navigate = useNavigate();
   
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
@@ -16,9 +16,10 @@ const Register: React.FC = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
   const handleRegisterUser = async () => {
     try {
-      const token = await registerUser(email, username, password);
+      const data = await registerUser(email, username, password);
       navigate("/")
-      updateToken(token);
+      updateToken(data.token);
+      updateUserName(data.username);
     } catch (error) {
       console.error("Register failed", error);
     }
