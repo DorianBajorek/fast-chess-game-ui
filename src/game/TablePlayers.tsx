@@ -29,7 +29,7 @@ const TablePlayers: React.FC = () => {
         const playersData: Player[] = loggedInUsers.map((user: any, index: number) => ({
           id: index + 1,
           name: user.username,
-          rank: Math.floor(Math.random() * 2000) + 1000,
+          rank: user.rank,
         }));
 
         setPlayers(playersData);
@@ -42,8 +42,9 @@ const TablePlayers: React.FC = () => {
   }, [token]);
 
   const handlePlay = (playerName: string) => {
-    navigate('/game');
+    navigate('/game', { state: { playerName } });
   };
+  
 
   return (
     <div style={styles.container}>
