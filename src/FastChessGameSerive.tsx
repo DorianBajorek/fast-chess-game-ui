@@ -7,7 +7,7 @@ export const authenticateUser = async (username: string, password: string) => {
       password: password
     };
     const response = await axios.post("http://127.0.0.1:8000/rest_api/login/", payload);
-    console.log(response.data.token)
+    console.log(response.data)
     return response.data.token;
   } catch (error) {
     console.error('Invalid login to the service', error);
