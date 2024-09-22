@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { authenticateUser } from '../../FastChessGameSerive';
-import { useToken } from './TokenStore';
+import { useUserData } from './UserData';
 import { useNavigate } from 'react-router-dom';
 import { COLORS } from '../../Constans';
 
 const Login: React.FC = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const { updateToken } = useToken();
+  const { updateToken, updateUserName } = useUserData();
   const navigate = useNavigate();
   
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => setLogin(e.target.value);
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
   const handleAuthenticateUser = async () => {
-    const token = await authenticateUser(login, password);
-    updateToken(token);
+    const data = await authenticateUser(login, password);
+    updateToken(data.token);
+    updateUserName(data.username);
     navigate('/');
   };
 

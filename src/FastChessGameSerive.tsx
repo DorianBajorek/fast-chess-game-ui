@@ -8,7 +8,7 @@ export const authenticateUser = async (username: string, password: string) => {
     };
     const response = await axios.post("http://127.0.0.1:8000/rest_api/login/", payload);
     console.log(response.data)
-    return response.data.token;
+    return response.data;
   } catch (error) {
     console.error('Invalid login to the service', error);
     return null;
@@ -23,7 +23,7 @@ export const registerUser = async (email: string, username: string, password: st
       password: password
     };
     const response = await axios.post("http://127.0.0.1:8000/rest_api/signup/", payload);
-    return response.data.token;
+    return response.data;
   } catch (error) {
     console.error('Registration failed', error);
     return null;

@@ -1,11 +1,11 @@
 import React from 'react';
 import { COLORS } from '../Constans';
-import { useToken } from './loginPage/TokenStore';
+import { useUserData } from './loginPage/UserData';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Footer';
 
 const MainPage: React.FC = () => {
-  const { token } = useToken();
+  const { token } = useUserData();
   const navigate = useNavigate();
 
   const handleStartGame = () => {
@@ -31,7 +31,7 @@ const MainPage: React.FC = () => {
             Our portal offers everything you need to become a better player.
           </p>
           <div style={styles.actionButtons}>
-            {token ? (
+            {token != '' ? (
               <button onClick={handleStartGame} style={styles.playButton}>Start Playing</button>
             ) : (
               <button onClick={handleLogin} style={styles.playButton}>Login</button>

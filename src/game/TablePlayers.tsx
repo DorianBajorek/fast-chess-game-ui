@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { showActiveUsers } from '../FastChessGameSerive';
-import { useToken } from '../mainPage/loginPage/TokenStore';
+import { useUserData } from '../mainPage/loginPage/UserData';
 import { useNavigate } from 'react-router-dom';
 
 interface Player {
@@ -11,7 +11,7 @@ interface Player {
 
 const TablePlayers: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
-  const token = useToken().token;
+  const token = useUserData().token;
   const navigate = useNavigate();
 
   useEffect(() => {
