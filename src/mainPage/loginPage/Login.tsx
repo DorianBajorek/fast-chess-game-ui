@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { authenticateUser } from '../../FastChessGameSerive';
+import { authenticateUser } from '../../FastChessGameService';
 import { useUserData } from './UserData';
 import { useNavigate } from 'react-router-dom';
 import { COLORS } from '../../Constans';
@@ -7,15 +7,19 @@ import { COLORS } from '../../Constans';
 const Login: React.FC = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const { updateToken, updateUserName } = useUserData();
+  const { updateToken, updateUserName, updateEmail, updateRank } = useUserData();
   const navigate = useNavigate();
-  
+
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => setLogin(e.target.value);
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
+
   const handleAuthenticateUser = async () => {
     const data = await authenticateUser(login, password);
     updateToken(data.token);
     updateUserName(data.username);
+    updateEmail(data.email);
+    updateRank(data.rank);
+    console.log("asdas: " + data.rank)
     navigate('/');
   };
 

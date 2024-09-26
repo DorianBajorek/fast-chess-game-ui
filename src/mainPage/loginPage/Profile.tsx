@@ -20,9 +20,9 @@ const Profile: React.FC = () => {
 
   const profileInfoStyle: React.CSSProperties = {
     display: 'flex',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     width: '100%',
-    alignItems: 'center',
     marginBottom: '15px',
     padding: '10px 0',
     borderBottom: '1px solid #ddd',
@@ -37,16 +37,32 @@ const Profile: React.FC = () => {
   const valueStyle: React.CSSProperties = {
     fontSize: '16px',
     color: '#333',
+    marginBottom: '10px',
   };
 
+  const userData: React.CSSProperties = {
+    margin: '10px'
+  }
   const userName = useUserData().userName;
+  const email = useUserData().email;
+  const rank = useUserData().rank;
 
   return (
     <div style={containerStyle}>
-    <img src='../userAvatar.png' />
+      <img src='../userAvatar.png' alt="User Avatar" />
       <div style={profileInfoStyle}>
-        <span style={labelStyle}>Username</span>
-        <span style={valueStyle}>{userName}</span>
+        <div style={userData}>
+          <span style={labelStyle}>Username</span>
+          <div style={valueStyle}>{userName}</div>
+        </div>
+        <div style={userData}>
+          <span style={labelStyle}>Email</span>
+          <div style={valueStyle}>{email}</div>
+        </div>
+        <div style={userData}>
+          <span style={labelStyle}>Rank</span>
+          <div style={valueStyle}>{rank}</div>
+        </div>
       </div>
     </div>
   );

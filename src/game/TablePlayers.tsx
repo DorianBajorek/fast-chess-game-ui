@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { showActiveUsers } from '../FastChessGameSerive';
+import { showActiveUsers } from '../FastChessGameService';
 import { useUserData } from '../mainPage/loginPage/UserData';
 import { useNavigate } from 'react-router-dom';
 
