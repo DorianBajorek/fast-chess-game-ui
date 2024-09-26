@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { registerUser } from '../../FastChessGameSerive';
+import { registerUser } from '../../FastChessGameService';
 import { useUserData } from './UserData';
 import { useNavigate } from 'react-router-dom';
 import { COLORS } from '../../Constans';
@@ -8,7 +8,7 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { updateToken, updateUserName } = useUserData();
+  const { updateToken, updateUserName, updateEmail, updateRank } = useUserData();
   const navigate = useNavigate();
   
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
@@ -20,6 +20,8 @@ const Register: React.FC = () => {
       navigate("/")
       updateToken(data.token);
       updateUserName(data.username);
+      updateEmail(data.email);
+      updateRank(data.rank);
     } catch (error) {
       console.error("Register failed", error);
     }
