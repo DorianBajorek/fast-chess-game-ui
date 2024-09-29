@@ -1,32 +1,95 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import { useLocation } from 'react-router-dom';
+import { useUserData } from '../mainPage/loginPage/UserData';
 
 const Game: React.FC = () => {
   const [game, setGame] = useState(new Chess());
+  const [socket, setSocket] = useState<WebSocket | null>(null);
+  const [numberOfMove, setNumberOfMove] = useState(0);
 
   const location = useLocation();
   const playerName = location.state?.playerName;
+  const color = location.state?.color;
+  const roomKey = 1;
+  const token = useUserData().token;
+  const username = useUserData().userName;
+
+  useEffect(() => {
+    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/room/${roomKey}/?token=${token}`);
+
+    ws.onopen = () => {
+      console.log('WebSocket connection established');
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log('Received move:', data.message.message + " " + data.message.username);
+      if(data.message.username !== username) {
+        handleIncomingMove(data.message.message);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+
+    setSocket(ws);
+
+    return () => {
+      ws.close();
+    };
+  }, [roomKey, token]);
+
+  const handleIncomingMove = (move: string) => {
+    const [from, to] = move.split('-');
+    
+    console.log('Current FEN before incoming move:', game.fen());
+    
+    const result = game.move({
+        from,
+        to,
+        promotion: 'q',
+    });
+
+    if (result) {
+        setNumberOfMove(prev => prev + 1);
+        console.log('Move applied:', move);
+    } else {
+        console.error('Invalid move attempted:', move);
+    }
+
+    console.log('Current FEN after incoming move:', game.fen());
+  };
 
   const handleMove = (move: { from: string; to: string }) => {
-    const newGame = new Chess(game.fen());
-
-    try {
-      const result = newGame.move({
+    console.log('Current FEN before move:', game.fen());
+    
+    const result = game.move({
         from: move.from,
         to: move.to,
         promotion: 'q',
-      });
+    });
 
-      if (result) {
-        setGame(newGame);
+    if (result) {
+        const moveString = `${move.from}-${move.to}`;
+        if (socket) {
+            socket.send(JSON.stringify({ message: { message: moveString, username: username, moveNumber: numberOfMove + 1 } }));
+            setNumberOfMove(prev => prev + 1);
+        }
+        console.log('Move applied:', moveString);
         return true;
-      }
-    } catch (error) {
-      console.error("Invalid move:", error);
+    } else {
+        console.error("Invalid move:", move);
     }
 
+    console.log('Move failed:', move);
+    console.log('Current FEN after failed move:', game.fen());
     return false;
   };
 
@@ -74,6 +137,7 @@ const Game: React.FC = () => {
         <div style={boardStyle}>
           <Chessboard
             position={game.fen()}
+            boardOrientation={color}
             onPieceDrop={(sourceSquare, targetSquare) =>
               handleMove({ from: sourceSquare, to: targetSquare })
             }

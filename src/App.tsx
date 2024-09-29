@@ -31,7 +31,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/table" element={<TablePlayers />} />
-              <Route path="/game" element={<Game />} />
+              <Route path="/game/:roomKey" element={<Game />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </main>
