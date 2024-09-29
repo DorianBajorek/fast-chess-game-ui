@@ -65,7 +65,7 @@ const TablePlayers: React.FC = () => {
           };
 
           setSocket(ws);
-          navigate(`/game/${roomKey}`, { state: { playerName: response.competitor } }); // Updated URL
+          navigate(`/game/${roomKey}`, { state: { playerName: response.competitor, color: "black" } });
         } else {
           console.log("No one wants to play right now.");
         }
@@ -106,8 +106,8 @@ const TablePlayers: React.FC = () => {
         console.log('WebSocket connection closed');
       };
 
-      setSocket(ws); // Save the socket to state if you want to use it later
-      navigate(`/game/${roomKey}`, { state: { playerName } }); // Updated URL
+      setSocket(ws);
+      navigate(`/game/${roomKey}`, { state: { playerName, color: 'white' } });
     }
   };
 
