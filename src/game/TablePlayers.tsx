@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { showActiveUsers } from '../FastChessGameService';
+import { checkIfSomeoneWantsToPlay, showActiveUsers, wantPlay } from '../FastChessGameService';
 import { useUserData } from '../mainPage/loginPage/UserData';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,14 +11,15 @@ interface Player {
 
 const TablePlayers: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
+  const username = useUserData().userName;
   const token = useUserData().token;
   const navigate = useNavigate();
+  const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
         const response = await showActiveUsers(token);
-
         const loggedInUsers = response?.data;
 
         if (!loggedInUsers) {
@@ -34,17 +35,81 @@ const TablePlayers: React.FC = () => {
 
         setPlayers(playersData);
       } catch (error) {
-        console.error('Something wrong', error);
+        console.error('Something went wrong', error);
+      }
+    };
+
+    const checkIfSomeoneWantsToPlayImmediately = async () => {
+      try {
+        const response = await checkIfSomeoneWantsToPlay(token);
+        console.log("Immediate Check Response: ", response);
+
+        if (response.room !== -1) {
+          const roomKey = response.room;
+          const ws = new WebSocket(`ws://127.0.0.1:8000/ws/room/${roomKey}/?token=${token}`);
+
+          ws.onopen = () => {
+            console.log('WebSocket connection established');
+          };
+
+          ws.onmessage = (event) => {
+            console.log('Message from server: ', event.data);
+          };
+
+          ws.onerror = (error) => {
+            console.error('WebSocket error: ', error);
+          };
+
+          ws.onclose = () => {
+            console.log('WebSocket connection closed');
+          };
+
+          setSocket(ws);
+          navigate(`/game/${roomKey}`, { state: { playerName: response.competitor } }); // Updated URL
+        } else {
+          console.log("No one wants to play right now.");
+        }
+      } catch (error) {
+        console.error('Failed to check if someone wants to play', error);
       }
     };
 
     fetchPlayers();
+    checkIfSomeoneWantsToPlayImmediately();
+
+    const intervalId = setInterval(checkIfSomeoneWantsToPlayImmediately, 5000);
+
+    return () => clearInterval(intervalId);
   }, [token]);
 
-  const handlePlay = (playerName: string) => {
-    navigate('/game', { state: { playerName } });
+  const handlePlay = async (playerName: string) => {
+    const response = await wantPlay(username, token, playerName);
+    console.log("JAZDA: " + JSON.stringify(response, null, 2));
+
+    if (response && response.key !== -1) {
+      const roomKey = response.key;
+      const ws = new WebSocket(`ws://127.0.0.1:8000/ws/room/${roomKey}/?token=${token}`);
+
+      ws.onopen = () => {
+        console.log('WebSocket connection established');
+      };
+
+      ws.onmessage = (event) => {
+        console.log('Message from server: ', event.data);
+      };
+
+      ws.onerror = (error) => {
+        console.error('WebSocket error: ', error);
+      };
+
+      ws.onclose = () => {
+        console.log('WebSocket connection closed');
+      };
+
+      setSocket(ws); // Save the socket to state if you want to use it later
+      navigate(`/game/${roomKey}`, { state: { playerName } }); // Updated URL
+    }
   };
-  
 
   return (
     <div style={styles.container}>
