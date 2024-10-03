@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { checkIfSomeoneWantsToPlay, showActiveUsers, wantPlay } from '../FastChessGameService';
 import { useUserData } from '../mainPage/loginPage/UserData';
 import { useNavigate } from 'react-router-dom';
+import { closeWebSocketConnection, createWebSocketConnectionForStartGame } from '../WebSocketService';
 
 interface Player {
   id: number;
@@ -42,29 +43,14 @@ const TablePlayers: React.FC = () => {
     const checkIfSomeoneWantsToPlayImmediately = async () => {
       try {
         const response = await checkIfSomeoneWantsToPlay(token);
-        console.log("Immediate Check Response: ", response);
 
         if (response.room !== -1) {
           const roomKey = response.room;
-          const ws = new WebSocket(`ws://127.0.0.1:8000/ws/room/${roomKey}/?token=${token}`);
 
-          ws.onopen = () => {
-            console.log('WebSocket connection established');
-          };
-
-          ws.onmessage = (event) => {
-            console.log('Message from server: ', event.data);
-          };
-
-          ws.onerror = (error) => {
-            console.error('WebSocket error: ', error);
-          };
-
-          ws.onclose = () => {
-            console.log('WebSocket connection closed');
-          };
+          const ws = createWebSocketConnectionForStartGame(roomKey, token);
 
           setSocket(ws);
+
           navigate(`/game/${roomKey}`, { state: { playerName: response.competitor, color: "black" } });
         } else {
           console.log("No one wants to play right now.");
@@ -79,34 +65,24 @@ const TablePlayers: React.FC = () => {
 
     const intervalId = setInterval(checkIfSomeoneWantsToPlayImmediately, 5000);
 
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+      if (socket) {
+        closeWebSocketConnection(socket);
+      }
+    };
   }, [token]);
 
   const handlePlay = async (playerName: string) => {
     const response = await wantPlay(username, token, playerName);
-    console.log("JAZDA: " + JSON.stringify(response, null, 2));
 
     if (response && response.key !== -1) {
       const roomKey = response.key;
-      const ws = new WebSocket(`ws://127.0.0.1:8000/ws/room/${roomKey}/?token=${token}`);
 
-      ws.onopen = () => {
-        console.log('WebSocket connection established');
-      };
-
-      ws.onmessage = (event) => {
-        console.log('Message from server: ', event.data);
-      };
-
-      ws.onerror = (error) => {
-        console.error('WebSocket error: ', error);
-      };
-
-      ws.onclose = () => {
-        console.log('WebSocket connection closed');
-      };
+      const ws = createWebSocketConnectionForStartGame(roomKey, token);
 
       setSocket(ws);
+
       navigate(`/game/${roomKey}`, { state: { playerName, color: 'white' } });
     }
   };
