@@ -3,6 +3,7 @@ import { Chess } from 'chess.js';
 import { Chessboard } from 'react-chessboard';
 import { useLocation } from 'react-router-dom';
 import { useUserData } from '../mainPage/loginPage/UserData';
+import { createWebSocketConnectionForPlay } from '../WebSocketService';
 
 const Game: React.FC = () => {
   const [game, setGame] = useState(new Chess());
@@ -17,28 +18,8 @@ const Game: React.FC = () => {
   const username = useUserData().userName;
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/room/${roomKey}/?token=${token}`);
-
-    ws.onopen = () => {
-      console.log('WebSocket connection established');
-    };
-
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log('Received move:', data.message.message + " " + data.message.username);
-      if(data.message.username !== username) {
-        handleIncomingMove(data.message.message);
-      }
-    };
-
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    ws.onclose = () => {
-      console.log('WebSocket connection closed');
-    };
-
+    const ws = createWebSocketConnectionForPlay(roomKey, token, username, handleIncomingMove);
+    
     setSocket(ws);
 
     return () => {
