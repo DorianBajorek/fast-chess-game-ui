@@ -84,3 +84,24 @@ export const checkIfSomeoneWantsToPlay = async (token: string) => {
     return null;
   }
 };
+
+
+export const deleteGame = async (username1: string, username2: string, token: string) => {
+  try {
+    const payload = {
+      username1: username1,
+      username2: username2,
+    };
+    const response = await axios.delete("http://127.0.0.1:8000/rest_api/delete_game/", {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+      data: payload,
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Błąd przy usuwaniu gry', error);
+    return null;
+  }
+};
